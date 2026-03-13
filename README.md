@@ -1,6 +1,6 @@
 # Energy Monitoring Dashboard
 
-> Streamlit-Dashboard für Live-Monitoring von Energie- und Mediendaten mit integriertem lokalem Demo-Backend.
+> Streamlit-Dashboard für Live-Monitoring von Energie- und Mediendaten mit integriertem Demo-Modus.
 
 Dieses Projekt stellt eine kompakte Monitoring-Oberfläche für maschinenbezogene Energiedaten bereit. Es ist für einen schnellen lokalen Start, gut lesbare Visualisierungen und eine einfache Anpassung ausgelegt, wenn einzelne Dashboard-Bereiche nicht benötigt werden.
 
@@ -20,13 +20,13 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Nach dem Start öffnet sich das Dashboard im Browser und verbindet sich automatisch mit der konfigurierten Datenquelle. In der Standardkonfiguration wird das lokale Demo-Backend verwendet, sodass die Anwendung sofort ausprobiert werden kann.
+Nach dem Start öffnet sich das Dashboard im Browser und verbindet sich automatisch mit der konfigurierten Datenquelle. In der Standardkonfiguration läuft ein interner Demo-Modus direkt im Streamlit-Prozess, sodass die Anwendung sofort ausprobiert werden kann.
 
 ## Was Das Dashboard Bietet
 
 - Ein zentrales Dashboard für Live-Monitoring von Energieverbrauch und Maschinenstatus
 - Optionale Ansichten für Komponenten, Zusatzinformationen und JSON-Inspektion
-- Ein lokales Mock-Backend für Entwicklung und Demonstrationen
+- Einen internen Demo-Datenmodus für Entwicklung und Demonstrationen
 - Gemeinsame Plot-, Validierungs- und Transformationshelfer für eine konsistente Oberfläche
 
 ## Anwendungsfluss
@@ -69,10 +69,10 @@ Fehlende optionale Dateien werden sauber abgefangen. Die übrigen Tabs funktioni
 
 ### Externe Datenquelle Verwenden
 
-Wenn das Dashboard statt des lokalen Demo-Dienstes mit einem bestehenden Backend verbunden werden soll, kann es so gestartet werden:
+Wenn das Dashboard statt des internen Demo-Modus mit einem bestehenden Backend verbunden werden soll, kann es so gestartet werden:
 
 ```bash
-DATA_SERVER_URL=https://example.com streamlit run app.py
+DATA_SOURCE_MODE=external DATA_SERVER_URL=https://example.com streamlit run app.py
 ```
 
 ## Projektstruktur
@@ -84,7 +84,7 @@ DATA_SERVER_URL=https://example.com streamlit run app.py
 | `dashboard_views.py` | Rendering der Kernansicht |
 | `dashboard_tabs.py` | Tab-Registry und Laden optionaler Tabs |
 | `live_data.py` | Verarbeitung von Live-Daten und Historie |
-| `data_server.py` | Lokales Demo-Backend |
+| `data_server.py` | Optionales Standalone-Demo-Backend |
 | `plotting.py` | Gemeinsame Erstellung von Plotly-Figuren |
 | `snapshot_schema.py` | Hilfsfunktionen für Snapshot-Validierung |
 | `utils.py` | Allgemeine Hilfsfunktionen |
@@ -92,7 +92,7 @@ DATA_SERVER_URL=https://example.com streamlit run app.py
 ## Leitgedanken
 
 - Klare Betriebsübersicht statt unnötiger technischer Überladung
-- Einfache lokale Demo ohne zusätzliche Infrastruktur
+- Einfache lokale Demo ohne zusätzlichen Nebenserver
 - Anpassbar mit wenig Aufwand, auch für Nicht-Programmierer
 - Robustes Verhalten, wenn optionale UI-Module entfernt werden
 

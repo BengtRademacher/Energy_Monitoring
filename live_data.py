@@ -13,7 +13,7 @@ import orjson
 import websockets
 
 from config import CONFIG
-from data_server import ensure_local_data_server_running
+from demo_data import build_snapshot
 from snapshot_schema import is_valid_snapshot
 from utils import append_to_history, initialize_state
 
@@ -39,6 +39,82 @@ class RenderContext:
     history_capacity: int
 
 
+def resolve_data_source_mode(source_mode: str | None = None, api_base: str | None = None) -> str:
+    raw_mode = CONFIG.get("DATA_SOURCE_MODE") if source_mode is None else source_mode
+    configured_mode = str(raw_mode or "").strip().lower()
+    if configured_mode in {"demo", "external"}:
+        return configured_mode
+
+    raw_api_base = CONFIG.get("API_BASE") if api_base is None else api_base
+    configured_api_base = str(raw_api_base or "").strip()
+    return "external" if configured_api_base else "demo"
+
+
+class DemoReceiver:
+    """Erzeugt Demo-Snapshots im Streamlit-Prozess und puffert sie threadsicher."""
+
+    def __init__(self, refresh_interval_s: float) -> None:
+        self.refresh_interval_s = max(0.1, float(refresh_interval_s))
+        self.message_queue: queue.Queue[tuple[Dict[str, Any], str]] = queue.Queue(maxsize=256)
+        self.stop_event = threading.Event()
+        self.thread: threading.Thread | None = None
+        self._status_lock = threading.Lock()
+        self._connected = False
+        self._last_error = ""
+        self.ws_url = "demo://local"
+
+    def start(self) -> None:
+        if self.thread is not None and self.thread.is_alive():
+            return
+        self.stop_event.clear()
+        self.thread = threading.Thread(target=self._run, name="demo-receiver", daemon=True)
+        self.thread.start()
+
+    def stop(self, timeout_s: float = 1.0) -> None:
+        self.stop_event.set()
+        if self.thread is not None and self.thread.is_alive():
+            self.thread.join(timeout=timeout_s)
+
+    def status_snapshot(self) -> Dict[str, Any]:
+        with self._status_lock:
+            return {
+                "connected": self._connected,
+                "last_error": self._last_error,
+                "ws_url": self.ws_url,
+            }
+
+    def _set_status(self, connected: bool, last_error: str = "") -> None:
+        with self._status_lock:
+            self._connected = connected
+            self._last_error = last_error
+
+    def _enqueue_snapshot(self, payload: Dict[str, Any], raw_text: str) -> None:
+        try:
+            self.message_queue.put_nowait((payload, raw_text))
+        except queue.Full:
+            try:
+                self.message_queue.get_nowait()
+            except queue.Empty:
+                pass
+            try:
+                self.message_queue.put_nowait((payload, raw_text))
+            except queue.Full:
+                pass
+
+    def _run(self) -> None:
+        self._set_status(True, "")
+        while not self.stop_event.is_set():
+            try:
+                payload = build_snapshot()
+                raw_text = orjson.dumps(payload).decode("utf-8")
+                self._enqueue_snapshot(payload, raw_text)
+                self._set_status(True, "")
+            except Exception as exc:  # pragma: no cover - protective branch
+                self._set_status(False, str(exc))
+                LOGGER.warning("Demo-Datenquelle fehlgeschlagen (%s). Neuer Versuch in %ss.", exc, self.refresh_interval_s)
+            self.stop_event.wait(self.refresh_interval_s)
+
+
 class WebSocketReceiver:
     """Liest den WebSocket-Stream im Hintergrund und puffert Nachrichten threadsicher."""
 
@@ -54,8 +130,14 @@ class WebSocketReceiver:
     def start(self) -> None:
         if self.thread is not None and self.thread.is_alive():
             return
+        self.stop_event.clear()
         self.thread = threading.Thread(target=self._run, name="ws-receiver", daemon=True)
         self.thread.start()
+
+    def stop(self, timeout_s: float = 1.0) -> None:
+        self.stop_event.set()
+        if self.thread is not None and self.thread.is_alive():
+            self.thread.join(timeout=timeout_s)
 
     def status_snapshot(self) -> Dict[str, Any]:
         with self._status_lock:
@@ -117,7 +199,9 @@ class WebSocketReceiver:
 
 def derive_websocket_url(api_base: str | None = None) -> str:
     """Leitet die WebSocket-URL aus der API-Basis ab."""
-    base = str(api_base or CONFIG.get("API_BASE") or "http://127.0.0.1:8000").rstrip("/")
+    base = str(api_base or CONFIG.get("API_BASE") or "").rstrip("/")
+    if not base:
+        raise ValueError("Externer Datenmodus erfordert DATA_SERVER_URL.")
     if "localhost" in base:
         base = base.replace("localhost", "127.0.0.1")
 
@@ -150,19 +234,34 @@ def ensure_state(session_state: Any) -> None:
     session_state.setdefault("latest_snapshot", None)
     session_state.setdefault("latest_raw_text", "")
     session_state.setdefault("_last_data_ts", None)
-    session_state.setdefault("_ws_receiver", None)
+    session_state.setdefault("_data_receiver", None)
 
 
-def get_receiver(session_state: Any) -> WebSocketReceiver:
-    ensure_local_data_server_running(CONFIG.get("API_BASE"))
+def _stop_receiver_if_present(receiver: Any) -> None:
+    stop = getattr(receiver, "stop", None)
+    if callable(stop):
+        stop()
+
+
+def get_receiver(session_state: Any) -> DemoReceiver | WebSocketReceiver:
+    mode = resolve_data_source_mode()
+    receiver = session_state.get("_data_receiver")
+
+    if mode == "demo":
+        refresh_interval_s = float(CONFIG["DEMO_REFRESH_SECONDS"])
+        if not isinstance(receiver, DemoReceiver):
+            _stop_receiver_if_present(receiver)
+            receiver = DemoReceiver(refresh_interval_s)
+            session_state["_data_receiver"] = receiver
+        receiver.start()
+        return receiver
+
     ws_url = derive_websocket_url()
-    receiver = session_state.get("_ws_receiver")
     if not isinstance(receiver, WebSocketReceiver) or receiver.ws_url != ws_url:
+        _stop_receiver_if_present(receiver)
         receiver = WebSocketReceiver(ws_url)
-        receiver.start()
-        session_state["_ws_receiver"] = receiver
-    else:
-        receiver.start()
+        session_state["_data_receiver"] = receiver
+    receiver.start()
     return receiver
 
 

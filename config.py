@@ -69,7 +69,17 @@ def _get_sensor_names() -> list[str]:
     ]
 
 
-_default_api_base = _get_env_str("DATA_SERVER_URL", "http://127.0.0.1:8000").rstrip("/")
+def _resolve_data_source_mode() -> str:
+    configured_mode = os.getenv("DATA_SOURCE_MODE", "").strip().lower()
+    if configured_mode in {"demo", "external"}:
+        return configured_mode
+
+    configured_api_base = os.getenv("DATA_SERVER_URL", "").strip()
+    return "external" if configured_api_base else "demo"
+
+
+_default_api_base = _get_env_str("DATA_SERVER_URL", "").rstrip("/")
+_data_source_mode = _resolve_data_source_mode()
 
 _accent_tier1 = _get_env_str("ACCENT_TIER1", "#88b9dc")
 _accent_tier2 = _get_env_str("ACCENT_TIER2", "#d0e487")
@@ -85,6 +95,7 @@ _component_fill_rgba = _get_env_str("COMPONENT_FILL_RGBA", "rgba(0,0,0,0.08)")
 
 _live_window_seconds = _get_env_int("LIVE_WINDOW_SECONDS", 600)
 _websocket_rate_hz = max(1, _get_env_int("WEBSOCKET_RATE_HZ", 1))
+_demo_refresh_seconds = 1.0 / float(_websocket_rate_hz)
 _history_max_points_override = _get_env_int("EMO_HISTORY_MAX_POINTS", 0)
 _history_max_points = (
     _history_max_points_override
@@ -157,6 +168,8 @@ _component_plot_colors = [
 
 CONFIG: Dict[str, Any] = {
     "API_BASE": _default_api_base,
+    "DATA_SOURCE_MODE": _data_source_mode,
+    "DEMO_REFRESH_SECONDS": _demo_refresh_seconds,
     "TITLE_TEXT": _title_text,
     "ACCENT_TIER1": _accent_tier1,
     "ACCENT_TIER2": _accent_tier2,
