@@ -1,101 +1,101 @@
 # Energy Monitoring Dashboard
 
-> Streamlit dashboard for live energy and media monitoring with a built-in local demo backend.
+> Streamlit-Dashboard für Live-Monitoring von Energie- und Mediendaten mit integriertem lokalem Demo-Backend.
 
-This project provides a compact monitoring interface for machine-level energy data. It is designed for quick local startup, clear visual feedback, and easy adaptation when individual dashboard areas are not needed.
+Dieses Projekt stellt eine kompakte Monitoring-Oberfläche für maschinenbezogene Energiedaten bereit. Es ist für einen schnellen lokalen Start, gut lesbare Visualisierungen und eine einfache Anpassung ausgelegt, wenn einzelne Dashboard-Bereiche nicht benötigt werden.
 
-## Overview
+## Überblick
 
-| Area | Description |
+| Bereich | Beschreibung |
 | --- | --- |
-| Live monitoring | Displays current machine and component values from a continuously updated snapshot stream. |
-| Fast local setup | Starts as a normal Streamlit app and works well for demos or local development. |
-| Modular UI | Additional tabs are intentionally separated, so the interface can be simplified without deep code changes. |
-| Visualization-first | Focus on readable status indicators, time-series views, and structured machine data inspection. |
+| Live-Monitoring | Zeigt aktuelle Maschinen- und Komponentenwerte aus einem fortlaufend aktualisierten Snapshot-Datenstrom an. |
+| Schneller lokaler Start | Läuft als normale Streamlit-App und eignet sich gut für Demos und lokale Entwicklung. |
+| Modulare UI | Zusätzliche Tabs sind bewusst getrennt aufgebaut, damit die Oberfläche ohne tiefgreifende Codeänderungen vereinfacht werden kann. |
+| Fokus auf Visualisierung | Schwerpunkt auf gut lesbaren Statusanzeigen, Zeitreihenansichten und strukturierter Inspektion von Maschinendaten. |
 
-## Quick Start
+## Schnellstart
 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-After startup, the dashboard opens in the browser and connects to the configured data source automatically. In the default setup, the local demo backend is used so the application can be explored immediately.
+Nach dem Start öffnet sich das Dashboard im Browser und verbindet sich automatisch mit der konfigurierten Datenquelle. In der Standardkonfiguration wird das lokale Demo-Backend verwendet, sodass die Anwendung sofort ausprobiert werden kann.
 
-## What You Get
+## Was Das Dashboard Bietet
 
-- A main dashboard for live energy and machine state monitoring
-- Optional views for components, additional information, and JSON inspection
-- A local mock backend for development and demonstrations
-- Shared plotting, validation, and transformation helpers for a consistent UI
+- Ein zentrales Dashboard für Live-Monitoring von Energieverbrauch und Maschinenstatus
+- Optionale Ansichten für Komponenten, Zusatzinformationen und JSON-Inspektion
+- Ein lokales Mock-Backend für Entwicklung und Demonstrationen
+- Gemeinsame Plot-, Validierungs- und Transformationshelfer für eine konsistente Oberfläche
 
-## Application Flow
+## Anwendungsfluss
 
 ```mermaid
 flowchart LR
-    A["Data source"] --> B["Snapshot validation"]
-    B --> C["Session state / history"]
-    C --> D["Dashboard tab"]
-    C --> E["Optional tabs"]
-    E --> F["Components"]
-    E --> G["Additional info"]
-    E --> H["JSON explorer"]
+    A["Datenquelle"] --> B["Snapshot-Validierung"]
+    B --> C["Session State / Historie"]
+    C --> D["Dashboard-Tab"]
+    C --> E["Optionale Tabs"]
+    E --> F["Komponenten"]
+    E --> G["Zusatzinfos"]
+    E --> H["JSON-Explorer"]
 ```
 
-## Interface Structure
+## Aufbau Der Oberfläche
 
-The dashboard is built around one central monitoring view plus optional extensions:
+Das Dashboard besteht aus einer zentralen Monitoring-Ansicht und optionalen Erweiterungen:
 
-| View | Purpose |
+| Ansicht | Zweck |
 | --- | --- |
-| `Dashboard` | Main operational overview with the most important live values and status information |
-| `Components` | Focused breakdown of component-level values |
-| `Additional Info` | Supplemental machine context and supporting details |
-| `JSON Explorer` | Raw structured snapshot inspection for debugging and validation |
+| `Dashboard` | Zentrale Betriebsübersicht mit den wichtigsten Live-Werten und Statusinformationen |
+| `Components` | Detaillierte Ansicht auf Komponentenebene |
+| `Additional Info` | Ergänzende Maschineninformationen und zusätzliche Kontextdaten |
+| `JSON Explorer` | Einblick in die rohen strukturierten Snapshots für Debugging und Validierung |
 
-## Customization
+## Anpassung
 
-The application is intentionally friendly for lightweight adaptation.
+Die Anwendung ist bewusst so aufgebaut, dass sie sich mit wenig Aufwand anpassen lässt.
 
-### Remove Unneeded Tabs
+### Nicht Benötigte Tabs Entfernen
 
-If a view should not appear, delete its corresponding optional file:
+Wenn eine Ansicht nicht angezeigt werden soll, kann die zugehörige optionale Datei gelöscht werden:
 
 - `tab_components_optional.py`
 - `tab_additional_info_optional.py`
 - `tab_json_explorer_optional.py`
 
-Missing optional files are handled gracefully. The remaining tabs continue to load without breaking the application.
+Fehlende optionale Dateien werden sauber abgefangen. Die übrigen Tabs funktionieren weiter, ohne dass die Anwendung dadurch bricht.
 
-### Use an External Data Source
+### Externe Datenquelle Verwenden
 
-If the dashboard should connect to an existing backend instead of the local demo service, start it with:
+Wenn das Dashboard statt des lokalen Demo-Dienstes mit einem bestehenden Backend verbunden werden soll, kann es so gestartet werden:
 
 ```bash
 DATA_SERVER_URL=https://example.com streamlit run app.py
 ```
 
-## Project Layout
+## Projektstruktur
 
-| File | Role |
+| Datei | Rolle |
 | --- | --- |
-| `app.py` | Main Streamlit entrypoint |
-| `dashboard_app.py` | Application bootstrap and runtime orchestration |
-| `dashboard_views.py` | Core dashboard rendering |
-| `dashboard_tabs.py` | Tab registry and optional tab loading |
-| `live_data.py` | Live data ingestion and history handling |
-| `data_server.py` | Local demo backend |
-| `plotting.py` | Shared Plotly figure creation |
-| `snapshot_schema.py` | Snapshot validation helpers |
-| `utils.py` | Shared utility helpers |
+| `app.py` | Zentraler Streamlit-Einstiegspunkt |
+| `dashboard_app.py` | App-Startlogik und Laufzeit-Orchestrierung |
+| `dashboard_views.py` | Rendering der Kernansicht |
+| `dashboard_tabs.py` | Tab-Registry und Laden optionaler Tabs |
+| `live_data.py` | Verarbeitung von Live-Daten und Historie |
+| `data_server.py` | Lokales Demo-Backend |
+| `plotting.py` | Gemeinsame Erstellung von Plotly-Figuren |
+| `snapshot_schema.py` | Hilfsfunktionen für Snapshot-Validierung |
+| `utils.py` | Allgemeine Hilfsfunktionen |
 
-## Design Goals
+## Leitgedanken
 
-- Clear operational overview instead of overly technical clutter
-- Easy local demonstration without extra infrastructure
-- Low-friction customization for non-developers
-- Robust behavior when optional UI modules are removed
+- Klare Betriebsübersicht statt unnötiger technischer Überladung
+- Einfache lokale Demo ohne zusätzliche Infrastruktur
+- Anpassbar mit wenig Aufwand, auch für Nicht-Programmierer
+- Robustes Verhalten, wenn optionale UI-Module entfernt werden
 
-## Notes
+## Hinweise
 
-Additional implementation details and technical structure are documented in [`struktur.md`](./struktur.md).
+Weitere technische Details und Informationen zur internen Struktur stehen in [`struktur.md`](./struktur.md).
