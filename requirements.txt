@@ -1,0 +1,9 @@
+altair==5.5.0
+fastapi
+pandas==2.2.3
+numpy==2.1.1
+streamlit
+orjson
+plotly
+uvicorn
+websockets

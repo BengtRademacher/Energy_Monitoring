@@ -1,0 +1,7 @@
+[theme]
+base = "light"
+primaryColor = "#88b9dc"   # Tier 1
+secondaryBackgroundColor = "#d0e487"   # Tier 2
+backgroundColor = "#FFFFFF"
+textColor = "#000000"
+
