@@ -1,95 +1,101 @@
-# Factory-X Dashboard
+# Energy Monitoring Dashboard
 
-Streamlit-Dashboard mit integriertem Mock-Data-Server und Live-Daten per WebSocket.
+> Streamlit dashboard for live energy and media monitoring with a built-in local demo backend.
 
-## Schnellstart
+This project provides a compact monitoring interface for machine-level energy data. It is designed for quick local startup, clear visual feedback, and easy adaptation when individual dashboard areas are not needed.
+
+## Overview
+
+| Area | Description |
+| --- | --- |
+| Live monitoring | Displays current machine and component values from a continuously updated snapshot stream. |
+| Fast local setup | Starts as a normal Streamlit app and works well for demos or local development. |
+| Modular UI | Additional tabs are intentionally separated, so the interface can be simplified without deep code changes. |
+| Visualization-first | Focus on readable status indicators, time-series views, and structured machine data inspection. |
+
+## Quick Start
 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Im Standardbetrieb startet die App den lokalen Data-Server automatisch und verbindet sich danach per WebSocket mit `ws://127.0.0.1:8000/ws`.
+After startup, the dashboard opens in the browser and connects to the configured data source automatically. In the default setup, the local demo backend is used so the application can be explored immediately.
 
-## Projektstruktur
+## What You Get
 
-- `app.py`: kanonischer Streamlit-Einstiegspunkt
-- `dashboard_app.py`: App-Initialisierung und Start des lokalen Data-Servers
-- `dashboard_views.py`: Kernansicht mit Tab 1 (`Dashboard`)
-- `dashboard_tabs.py`: Tab-Registry und defensiver Loader fuer optionale Tabs
-- `tab_components_optional.py`: optionaler Tab fuer Komponenten
-- `tab_additional_info_optional.py`: optionaler Tab fuer Zusatzinformationen
-- `tab_json_explorer_optional.py`: optionaler Tab fuer den JSON-Explorer
-- `data_server.py`: eingebetteter Mock-Server fuer HTTP- und WebSocket-Daten
-- `tests/`: automatisierte Tests
+- A main dashboard for live energy and machine state monitoring
+- Optional views for components, additional information, and JSON inspection
+- A local mock backend for development and demonstrations
+- Shared plotting, validation, and transformation helpers for a consistent UI
 
-## Optionale Tabs entfernen
+## Application Flow
 
-Tab 1 (`Dashboard`) ist fest eingebaut. Alle weiteren Tabs sind absichtlich als separate Dateien ausgelagert, damit sie auch von Nicht-Programmierern leicht entfernt werden koennen.
+```mermaid
+flowchart LR
+    A["Data source"] --> B["Snapshot validation"]
+    B --> C["Session state / history"]
+    C --> D["Dashboard tab"]
+    C --> E["Optional tabs"]
+    E --> F["Components"]
+    E --> G["Additional info"]
+    E --> H["JSON explorer"]
+```
 
-Wenn eine der folgenden Dateien geloescht wird, verschwindet der zugehoerige Tab automatisch beim naechsten Start:
+## Interface Structure
+
+The dashboard is built around one central monitoring view plus optional extensions:
+
+| View | Purpose |
+| --- | --- |
+| `Dashboard` | Main operational overview with the most important live values and status information |
+| `Components` | Focused breakdown of component-level values |
+| `Additional Info` | Supplemental machine context and supporting details |
+| `JSON Explorer` | Raw structured snapshot inspection for debugging and validation |
+
+## Customization
+
+The application is intentionally friendly for lightweight adaptation.
+
+### Remove Unneeded Tabs
+
+If a view should not appear, delete its corresponding optional file:
 
 - `tab_components_optional.py`
 - `tab_additional_info_optional.py`
 - `tab_json_explorer_optional.py`
 
-Die App ist so aufgebaut, dass fehlende optionale Dateien keinen Fehler ausloesen. Die verbleibenden Tabs ruecken einfach auf.
+Missing optional files are handled gracefully. The remaining tabs continue to load without breaking the application.
 
-## Pflichtdateien und optionale Dateien
+### Use an External Data Source
 
-Pflichtbestandteile fuer den normalen Betrieb sind unter anderem:
-
-- `app.py`
-- `dashboard_app.py`
-- `dashboard_views.py`
-- `dashboard_tabs.py`
-- `config.py`
-- `live_data.py`
-- `data_server.py`
-- `requirements.txt`
-
-Optional sind nur die drei oben genannten `tab_*_optional.py`-Dateien.
-
-## Externer Data-Server
-
-Wenn bereits ein externer Dienst existiert, kann die App ohne eingebetteten Server betrieben werden:
+If the dashboard should connect to an existing backend instead of the local demo service, start it with:
 
 ```bash
 DATA_SERVER_URL=https://example.com streamlit run app.py
 ```
 
-Sobald `DATA_SERVER_URL` nicht auf `localhost` oder `127.0.0.1` zeigt, startet die App keinen lokalen FastAPI/Uvicorn-Server.
+## Project Layout
 
-## API- und WebSocket-Endpunkte
+| File | Role |
+| --- | --- |
+| `app.py` | Main Streamlit entrypoint |
+| `dashboard_app.py` | Application bootstrap and runtime orchestration |
+| `dashboard_views.py` | Core dashboard rendering |
+| `dashboard_tabs.py` | Tab registry and optional tab loading |
+| `live_data.py` | Live data ingestion and history handling |
+| `data_server.py` | Local demo backend |
+| `plotting.py` | Shared Plotly figure creation |
+| `snapshot_schema.py` | Snapshot validation helpers |
+| `utils.py` | Shared utility helpers |
 
-Der interne oder externe Data-Server verwendet dieselben Schnittstellen:
+## Design Goals
 
-- `GET /health`
-- `GET /api/emo/snapshot`
-- `GET /data`
-- `WS /ws`
+- Clear operational overview instead of overly technical clutter
+- Easy local demonstration without extra infrastructure
+- Low-friction customization for non-developers
+- Robust behavior when optional UI modules are removed
 
-## Vor dem ersten Git-Push
+## Notes
 
-Dieses Projekt sollte als eigenes Git-Repository direkt in diesem Ordner liegen. Aktuell zeigt das uebergeordnete Git-Root auf `C:\Users\rademacher`; dadurch wuerden beim Committen auch fremde Dateien ausserhalb des Projekts auftauchen.
-
-Empfohlene Schritte:
-
-1. Im Projektordner ein eigenes Repository initialisieren oder das Projekt in ein eigenes Repo verschieben.
-2. Pruefen, dass `git rev-parse --show-toplevel` auf diesen Ordner zeigt.
-3. Danach `git status` kontrollieren und nur Projektdateien committen.
-
-Beispiel:
-
-```bash
-cd C:\Users\rademacher\Desktop\Factory-X_Dashboard_Uhlmann
-git init
-git add .
-git commit -m "Initial commit"
-```
-
-## Tests
-
-```bash
-pytest -q
-```
+Additional implementation details and technical structure are documented in [`struktur.md`](./struktur.md).
