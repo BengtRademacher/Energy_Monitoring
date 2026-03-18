@@ -122,8 +122,8 @@ _font_weight_regular = _get_env_int("FONT_WEIGHT_REGULAR", 400)
 _font_weight_semibold = _get_env_int("FONT_WEIGHT_SEMIBOLD", 600)
 _font_weight_bold = _get_env_int("FONT_WEIGHT_BOLD", 700)
 
-_logo_ifw = _get_env_str("LOGO_IFW_BASENAME", "logo_ifw")
-_logo_fx = _get_env_str("LOGO_FX_BASENAME", "logo_fx")
+_logo_ifw = _get_env_str("LOGO_IFW_BASENAME", "logo_firma")
+_logo_fx = _get_env_str("LOGO_FX_BASENAME", "logo_f\u00f6rderung")
 _logo_meta = _get_env_str("LOGO_META_BASENAME", "logo_dmp70")
 
 _tab_titles = {
@@ -182,7 +182,8 @@ CONFIG: Dict[str, Any] = {
     "COMPONENT_MONO_HEX": _component_mono_hex,
     "COMPONENT_FILL_RGBA": _component_fill_rgba,
     "TAB_TITLES": _tab_titles,
-    "TABS": ["Dashboard", _tab_titles["components"], _tab_titles["info"], _tab_titles["json"]],
+    "TABS": ["Dashboard", _tab_titles["components"], _tab_titles["info"]],
+    "LEGACY_TABS": [_tab_titles["json"]],
     "HISTORY_MAX_POINTS": _history_max_points,
     "LIVE_WINDOW_SECONDS": _live_window_seconds,
     "WEBSOCKET_RATE_HZ": _websocket_rate_hz,

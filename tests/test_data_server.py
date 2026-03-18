@@ -15,6 +15,7 @@ from data_server import (
     get_local_server_status,
     stop_local_data_server,
 )
+from demo_data import _MAIN_ELECTRICAL_RANGES
 from snapshot_schema import is_valid_snapshot
 
 
@@ -36,6 +37,34 @@ class DataServerTests(unittest.TestCase):
             pneumatic = snapshot["data_mains"]["pneumatic_Hauptversorgung"]
             self.assertGreaterEqual(pneumatic, low)
             self.assertLessEqual(pneumatic, high)
+
+    def test_electrical_main_supply_uses_status_specific_ranges(self) -> None:
+        for status, (low, high) in _MAIN_ELECTRICAL_RANGES.items():
+            with self.subTest(status=status):
+                with patch("demo_data._get_machine_status", return_value=status):
+                    for _ in range(20):
+                        snapshot = build_snapshot()
+                        electrical = snapshot["data_mains"]["electrical_Hauptversorgung"]
+                        self.assertGreaterEqual(electrical, low)
+                        self.assertLessEqual(electrical, high)
+
+    def test_off_status_zeroes_electrical_main_and_all_components(self) -> None:
+        with patch("demo_data._get_machine_status", return_value="Off"):
+            snapshot = build_snapshot()
+
+        self.assertEqual(snapshot["data_mains"]["electrical_Hauptversorgung"], 0.0)
+        self.assertEqual(
+            snapshot["data_components"],
+            {
+                "component1_Heizstation": 0.0,
+                "component2_Siegelstation": 0.0,
+                "component3_Kompaktstation": 0.0,
+                "component4_Formstation": 0.0,
+                "component5_3rd_party_component": 0.0,
+                "component6_additional1": 0.0,
+                "component7_additional2": 0.0,
+            },
+        )
 
     def test_health_endpoint_reports_server_status(self) -> None:
         with TestClient(create_app()) as client:

@@ -25,7 +25,8 @@ Nach dem Start öffnet sich das Dashboard im Browser und verbindet sich automati
 ## Was Das Dashboard Bietet
 
 - Ein zentrales Dashboard für Live-Monitoring von Energieverbrauch und Maschinenstatus
-- Optionale Ansichten für Komponenten, Zusatzinformationen und JSON-Inspektion
+- Optionale Ansichten für Komponenten und Zusatzinformationen
+- Einen ausgelagerten Legacy-Tab für JSON-Inspektion, der im Code erhalten bleibt
 - Einen internen Demo-Datenmodus für Entwicklung und Demonstrationen
 - Gemeinsame Plot-, Validierungs- und Transformationshelfer für eine konsistente Oberfläche
 
@@ -39,7 +40,7 @@ flowchart LR
     C --> E["Optionale Tabs"]
     E --> F["Komponenten"]
     E --> G["Zusatzinfos"]
-    E --> H["JSON-Explorer"]
+    E --> H["Legacy: JSON-Explorer"]
 ```
 
 ## Aufbau Der Oberfläche
@@ -51,11 +52,21 @@ Das Dashboard besteht aus einer zentralen Monitoring-Ansicht und optionalen Erwe
 | `Dashboard` | Zentrale Betriebsübersicht mit den wichtigsten Live-Werten und Statusinformationen |
 | `Components` | Detaillierte Ansicht auf Komponentenebene |
 | `Additional Info` | Ergänzende Maschineninformationen und zusätzliche Kontextdaten |
-| `JSON Explorer` | Einblick in die rohen strukturierten Snapshots für Debugging und Validierung |
+| `JSON Explorer (Legacy)` | Einblick in die rohen strukturierten Snapshots für Debugging und Validierung |
 
 ## Anpassung
 
 Die Anwendung ist bewusst so aufgebaut, dass sie sich mit wenig Aufwand anpassen lässt.
+
+### Sichtbare Und Legacy-Tabs
+
+Standardmäßig zeigt die App drei Tabs an:
+
+- `Dashboard`
+- `Komponenten`
+- `Zusatzinformationen`
+
+Der `JSON-Explorer` bleibt als Legacy-Modul im Code erhalten, wird aber nicht mehr in der Standardnavigation angezeigt.
 
 ### Nicht Benötigte Tabs Entfernen
 

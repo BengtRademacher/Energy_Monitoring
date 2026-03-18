@@ -79,6 +79,7 @@ div[data-testid="stCaptionContainer"] p {{
   background-color: {config["PANEL_BG_INNER"]} !important;
 }}
 .st-key-dashboard-status-panel,
+.st-key-component-status-panel,
 [class*="st-key-component-panel-"],
 .st-key-json-body-panel {{
   background-color: {config["CHART_PANEL_BG"]} !important;
@@ -144,13 +145,25 @@ div[data-testid="stCaptionContainer"] p {{
 .st-key-additional-boxplot-panel div[data-testid="stImage"] {{
   display: flex;
   justify-content: center;
-  width: 100%;
 }}
 .st-key-additional-iso-panel div[data-testid="stImage"] img,
 .st-key-additional-boxplot-panel div[data-testid="stImage"] img {{
   display: block;
   margin: 0 auto;
-  max-width: min(100%, 60rem);
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}}
+.additional-machine-image {{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}}
+.additional-machine-image img {{
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
 }}
 div[data-testid="stTabs"] button[data-baseweb="tab"] {{
   gap: 0.45rem;

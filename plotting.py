@@ -26,6 +26,8 @@ class LinePlotSpec:
     chart_uirevision: str = "stable-live-chart"
     show_x_tick_labels: bool = True
     background_color: str | None = None
+    plot_background_color: str | None = None
+    paper_background_color: str | None = None
     y_unit: str | None = None
 
 
@@ -88,7 +90,9 @@ def _build_dynamic_y_axis(max_value: float, unit: str | None) -> dict[str, list[
 
 
 def build_line_plot_figure(df: pd.DataFrame, spec: LinePlotSpec) -> go.Figure:
-    background_color = spec.background_color or CONFIG["CHART_PANEL_BG"]
+    default_background_color = spec.background_color or CONFIG["CHART_PANEL_BG"]
+    plot_background_color = spec.plot_background_color or default_background_color
+    paper_background_color = spec.paper_background_color or default_background_color
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
@@ -135,8 +139,8 @@ def build_line_plot_figure(df: pd.DataFrame, spec: LinePlotSpec) -> go.Figure:
         ),
         showlegend=False,
         font=dict(family=CONFIG["PLOTLY_FONT_FAMILY"], size=CONFIG["PLOTLY_TICK_FONT_SIZE"]),
-        paper_bgcolor=background_color,
-        plot_bgcolor=background_color,
+        paper_bgcolor=paper_background_color,
+        plot_bgcolor=plot_background_color,
         hovermode="x unified",
         hoverlabel=dict(
             font=dict(family=CONFIG["PLOTLY_FONT_FAMILY"], size=CONFIG["PLOTLY_TICK_FONT_SIZE"])

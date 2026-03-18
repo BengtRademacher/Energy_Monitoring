@@ -8,15 +8,14 @@ from config import CONFIG
 from dashboard_tabs import build_tab_definitions
 from dashboard_view_shared import (
     build_area_line_figure,
-    build_status_timeline_figure,
     format_integer_de,
     format_power_value,
-    render_machine_status_legend,
+    render_machine_status_panel,
     render_plotly_chart,
 )
 from live_data import RenderContext, build_render_context, drain_receiver_queue
 from snapshot_schema import get_main_electrical, get_main_pneumatic
-from utils import build_generic_line_df, build_line_df, build_status_timeline_df
+from utils import build_generic_line_df, build_line_df
 
 
 def _render_layer_metric_card(title: str, value: str, accent_color: str, container_key: str) -> None:
@@ -68,7 +67,7 @@ def render_summary_cards(current: Dict[str, Any] | None) -> None:
             if electrical_power is not None and pneumatic_power is not None:
                 yearly_demand = (electrical_power + pneumatic_power) * 8 * 2 * 220 / 1000.0
         _render_summary_metric_card(
-            "Jaehrlicher Energieverbrauch",
+            "Jährlicher Energieverbrauch",
             f"{format_integer_de(yearly_demand)} kWh" if yearly_demand is not None else "--",
             "dashboard-summary-card-yearly",
         )
@@ -162,7 +161,7 @@ def _render_dashboard_view(context: RenderContext) -> None:
     with right_col:
         _render_dashboard_group_panel(
             group_key="dashboard-air-group",
-            metric_title="Pneumatische Hauptversorgung Leistungsaequivalent",
+            metric_title="Pneumatische Hauptversorgung Leistungsäquivalent",
             metric_value=format_power_value(get_main_pneumatic(context.latest or {})),
             metric_color=CONFIG["PNEUMATIC_PRIMARY_HEX"],
             metric_key="dashboard-air-card",
@@ -171,12 +170,11 @@ def _render_dashboard_view(context: RenderContext) -> None:
             figure=_build_dashboard_air_figure(context),
         )
 
-    with st.container(border=True, key="dashboard-status-panel"):
-        st.subheader("Maschinenstatus")
-        render_machine_status_legend()
-        timeline_df = build_status_timeline_df(context.window_history, window_seconds=context.window_seconds)
-        timeline_fig = build_status_timeline_figure(timeline_df, context.now_dt, context.window_start_dt)
-        render_plotly_chart(timeline_fig, key="plotly_timeline")
+    render_machine_status_panel(
+        context,
+        container_key="dashboard-status-panel",
+        chart_key="plotly_timeline",
+    )
 
 
 @st.fragment(run_every="5s")

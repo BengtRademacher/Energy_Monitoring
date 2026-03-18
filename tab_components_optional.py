@@ -5,7 +5,13 @@ import streamlit as st
 
 from config import CONFIG
 from dashboard_tabs import TabDefinition
-from dashboard_view_shared import build_area_line_figure, component_color_map, render_plotly_chart
+from dashboard_view_shared import (
+    apply_status_overlay_above_line,
+    build_area_line_figure,
+    component_color_map,
+    render_machine_status_panel,
+    render_plotly_chart,
+)
 from live_data import RenderContext, build_render_context, drain_receiver_queue
 from snapshot_schema import COMPONENT_KEYS, get_component_display_name
 from utils import build_component_history_df
@@ -25,7 +31,7 @@ def build_component_figure(
         return None
 
     color = component_color_map()[component_key]
-    return build_area_line_figure(
+    fig = build_area_line_figure(
         plot_df,
         x_col="ts",
         y_col=component_key,
@@ -41,6 +47,7 @@ def build_component_figure(
         show_x_tick_labels=show_x_tick_labels,
         y_unit="W",
     )
+    return apply_status_overlay_above_line(fig, component_key=component_key, context=context)
 
 
 def render_component_chart(
@@ -69,6 +76,13 @@ def render_component_showcase_view(context: RenderContext) -> None:
     if not isinstance(context.latest, dict):
         st.info("Warte auf Daten...")
         return
+
+    render_machine_status_panel(
+        context,
+        container_key="component-status-panel",
+        chart_key="plotly_component_timeline",
+        height_px=78,
+    )
 
     component_df = build_component_history_df(context.window_history, window_seconds=context.window_seconds)
     for row_start in range(0, 6, 2):

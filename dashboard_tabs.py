@@ -27,9 +27,13 @@ class OptionalTabSpec:
     filename: str
 
 
-OPTIONAL_TAB_SPECS: tuple[OptionalTabSpec, ...] = (
+VISIBLE_OPTIONAL_TAB_SPECS: tuple[OptionalTabSpec, ...] = (
     OptionalTabSpec(id="components", default_title="Komponenten", filename="tab_components_optional.py"),
     OptionalTabSpec(id="info", default_title="Zusatzinformationen", filename="tab_additional_info_optional.py"),
+)
+
+
+LEGACY_TAB_SPECS: tuple[OptionalTabSpec, ...] = (
     OptionalTabSpec(id="json", default_title="JSON-Explorer", filename="tab_json_explorer_optional.py"),
 )
 
@@ -54,8 +58,16 @@ def build_tab_definitions(core_render: Callable[[], None]) -> list[TabDefinition
 
 
 def load_optional_tab_definitions() -> list[TabDefinition]:
+    return _load_tab_definitions(VISIBLE_OPTIONAL_TAB_SPECS)
+
+
+def load_legacy_tab_definitions() -> list[TabDefinition]:
+    return _load_tab_definitions(LEGACY_TAB_SPECS)
+
+
+def _load_tab_definitions(tab_specs: tuple[OptionalTabSpec, ...]) -> list[TabDefinition]:
     tab_definitions: list[TabDefinition] = []
-    for spec in OPTIONAL_TAB_SPECS:
+    for spec in tab_specs:
         loaded_definition = _load_optional_tab_definition(spec)
         if loaded_definition is not None:
             tab_definitions.append(loaded_definition)

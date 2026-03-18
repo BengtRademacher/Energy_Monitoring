@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import base64
+from pathlib import Path
+
 import streamlit as st
 
 from config import CONFIG
@@ -8,11 +11,30 @@ from utils import find_image_path
 
 
 def _find_iso_logo_path() -> str | None:
-    return find_image_path("logo_ISO")
+    return find_image_path("logo_bec700")
 
 
 def _find_boxplot_logo_path() -> str | None:
-    return find_image_path("logo_boxplot")
+    return find_image_path("logo_b1770c")
+
+
+def _render_centered_logo_image(image_path: str, width_px: int) -> None:
+    suffix = Path(image_path).suffix.lower()
+    mime_type = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".svg": "image/svg+xml",
+    }.get(suffix, "application/octet-stream")
+    encoded = base64.b64encode(Path(image_path).read_bytes()).decode("ascii")
+    st.markdown(
+        f"""
+<div class="additional-machine-image">
+  <img src="data:{mime_type};base64,{encoded}" alt="" style="width:{width_px}px;" />
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
 
 def render_additional_info_tab() -> None:
@@ -27,16 +49,12 @@ def render_additional_info_tab() -> None:
     logo_iso = _find_iso_logo_path()
     if logo_iso:
         with st.container(border=True, key="additional-iso-panel"):
-            _, center_col, _ = st.columns([1, 2, 1])
-            with center_col:
-                st.image(logo_iso)
+            _render_centered_logo_image(logo_iso, width_px=1220)
 
     logo_boxplot = _find_boxplot_logo_path()
     if logo_boxplot:
         with st.container(border=True, key="additional-boxplot-panel"):
-            _, center_col, _ = st.columns([1, 2, 1])
-            with center_col:
-                st.image(logo_boxplot)
+            _render_centered_logo_image(logo_boxplot, width_px=760)
 
     info_col1, info_col2 = st.columns(2)
     with info_col1:
@@ -44,15 +62,15 @@ def render_additional_info_tab() -> None:
             logo_ifw = find_image_path(CONFIG["LOGO_IFW_BASENAME"])
             if logo_ifw:
                 st.image(logo_ifw, width=180)
-            st.markdown("**Institut fuer Fertigungstechnik und Werkzeugmaschinen (IFW)**")
-            st.caption("Leibniz Universitaet Hannover")
+            st.markdown("**Uhlmann Pac-Systeme GmbH & Co. KG**")
+            st.caption("In Kooperation mit der Leibniz Universität Hannover")
     with info_col2:
         with st.container(border=True, key="additional-fx-panel"):
             logo_fx = find_image_path(CONFIG["LOGO_FX_BASENAME"])
             if logo_fx:
                 st.image(logo_fx, width=180)
             st.markdown("**Factory-X 2026**")
-            st.caption("Autoren: Bengt Rademacher und Alexander Boettcher")
+            st.caption("Autoren: Bengt Rademacher, Alexander Böttcher und Anna Hörner")
 
 
 def get_optional_tab_definition() -> TabDefinition:
