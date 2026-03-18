@@ -86,6 +86,7 @@ div[data-testid="stCaptionContainer"] p {{
 }}
 .st-key-additional-uhlmann-link,
 .st-key-additional-festo-link,
+.st-key-additional-export-link,
 .st-key-additional-ifw-panel,
 .st-key-additional-fx-panel,
 .st-key-additional-iso-panel,
@@ -113,6 +114,27 @@ div[data-testid="stCaptionContainer"] p {{
 .st-key-additional-logo-row div[data-testid="column"] > div {{
   display: flex;
   width: 100%;
+}}
+.st-key-additional-export-link button {{
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  opacity: 1 !important;
+  cursor: default !important;
+}}
+.st-key-additional-export-link button:hover,
+.st-key-additional-export-link button:focus,
+.st-key-additional-export-link button:active {{
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid #000000 !important;
+  box-shadow: none !important;
+}}
+.st-key-additional-export-link button p,
+.st-key-additional-export-link button span {{
+  color: #ffffff !important;
+  font-size: inherit !important;
+  font-weight: var(--fx-font-weight-semibold) !important;
 }}
 .st-key-additional-ifw-panel,
 .st-key-additional-fx-panel {{
