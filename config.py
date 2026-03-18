@@ -124,7 +124,6 @@ _font_weight_bold = _get_env_int("FONT_WEIGHT_BOLD", 700)
 
 _logo_ifw = _get_env_str("LOGO_IFW_BASENAME", "logo_firma")
 _logo_fx = _get_env_str("LOGO_FX_BASENAME", "logo_f\u00f6rderung")
-_logo_meta = _get_env_str("LOGO_META_BASENAME", "logo_dmp70")
 
 _tab_titles = {
     "components": _get_first_env_str(("TAB_COMPONENTS_TITLE", "TAB_2_TITLE", "TAB_3_TITLE"), "Komponenten"),
@@ -205,7 +204,6 @@ CONFIG: Dict[str, Any] = {
     "FONT_WEIGHT_BOLD": _font_weight_bold,
     "LOGO_IFW_BASENAME": _logo_ifw,
     "LOGO_FX_BASENAME": _logo_fx,
-    "LOGO_META_BASENAME": _logo_meta,
     "SENSOR_NAMES": _sensor_names,
     "PLOTLY_DEFAULT_HEIGHT_PX": _plotly_default_height_px,
     "COMPONENT_PLOT_HEIGHT_PX": _component_plot_height_px,

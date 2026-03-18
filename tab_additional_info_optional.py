@@ -10,10 +10,6 @@ from dashboard_tabs import TabDefinition
 from utils import find_image_path
 
 
-def _find_iso_logo_path() -> str | None:
-    return find_image_path("logo_bec700")
-
-
 def _find_boxplot_logo_path() -> str | None:
     return find_image_path("logo_b1770c")
 
@@ -38,21 +34,13 @@ def _render_centered_logo_image(image_path: str, width_px: int) -> None:
 
 
 def render_additional_info_tab() -> None:
-    link_col1, link_col2, link_col3 = st.columns(3)
+    link_col1, link_col2 = st.columns(2)
     with link_col1:
         with st.container(border=True, key="additional-uhlmann-link"):
             st.link_button("Link zu Uhlmann", "https://www.uhlmann.de/de", width="stretch", type="primary")
     with link_col2:
-        with st.container(border=True, key="additional-festo-link"):
-            st.link_button("Link zu Festo", "https://www.festo.com/de/de/", width="stretch", type="primary")
-    with link_col3:
         with st.container(border=True, key="additional-export-link"):
             st.button("Export", width="stretch", type="primary", disabled=True)
-
-    logo_iso = _find_iso_logo_path()
-    if logo_iso:
-        with st.container(border=True, key="additional-iso-panel"):
-            _render_centered_logo_image(logo_iso, width_px=1220)
 
     logo_boxplot = _find_boxplot_logo_path()
     if logo_boxplot:

@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 
 from config import CONFIG
-from tab_additional_info_optional import _find_boxplot_logo_path, _find_iso_logo_path
+from tab_additional_info_optional import _find_boxplot_logo_path
 from utils import find_image_path
 
 
@@ -16,8 +16,7 @@ class LogoAssetTests(unittest.TestCase):
         self.assertIsNotNone(find_image_path(CONFIG["LOGO_IFW_BASENAME"]))
         self.assertIsNotNone(find_image_path(CONFIG["LOGO_FX_BASENAME"]))
 
-    def test_optional_tab_replacement_logos_exist(self) -> None:
-        self.assertIsNotNone(_find_iso_logo_path())
+    def test_optional_tab_machine_logo_exists(self) -> None:
         self.assertIsNotNone(_find_boxplot_logo_path())
 
 

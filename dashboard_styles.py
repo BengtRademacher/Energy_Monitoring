@@ -85,11 +85,9 @@ div[data-testid="stCaptionContainer"] p {{
   background-color: {config["CHART_PANEL_BG"]} !important;
 }}
 .st-key-additional-uhlmann-link,
-.st-key-additional-festo-link,
 .st-key-additional-export-link,
 .st-key-additional-ifw-panel,
 .st-key-additional-fx-panel,
-.st-key-additional-iso-panel,
 .st-key-additional-boxplot-panel,
 .st-key-json-header-panel,
 .st-key-json-body-panel,
@@ -115,19 +113,38 @@ div[data-testid="stCaptionContainer"] p {{
   display: flex;
   width: 100%;
 }}
-.st-key-additional-export-link button {{
-  background: #000000 !important;
+.st-key-additional-uhlmann-link a {{
+  background: {config["ELECTRICAL_PRIMARY_HEX"]} !important;
   color: #ffffff !important;
-  border: 1px solid #000000 !important;
+  border: 1px solid {config["ELECTRICAL_PRIMARY_HEX"]} !important;
+}}
+.st-key-additional-uhlmann-link a:hover,
+.st-key-additional-uhlmann-link a:focus,
+.st-key-additional-uhlmann-link a:active {{
+  background: {config["ELECTRICAL_PRIMARY_HEX"]} !important;
+  color: #ffffff !important;
+  border: 1px solid {config["ELECTRICAL_PRIMARY_HEX"]} !important;
+  box-shadow: none !important;
+}}
+.st-key-additional-uhlmann-link a p,
+.st-key-additional-uhlmann-link a span {{
+  color: #ffffff !important;
+  font-size: inherit !important;
+  font-weight: var(--fx-font-weight-semibold) !important;
+}}
+.st-key-additional-export-link button {{
+  background: {config["ELECTRICAL_SOFT_HEX"]} !important;
+  color: #ffffff !important;
+  border: 1px solid {config["ELECTRICAL_SOFT_HEX"]} !important;
   opacity: 1 !important;
   cursor: default !important;
 }}
 .st-key-additional-export-link button:hover,
 .st-key-additional-export-link button:focus,
 .st-key-additional-export-link button:active {{
-  background: #000000 !important;
+  background: {config["ELECTRICAL_SOFT_HEX"]} !important;
   color: #ffffff !important;
-  border: 1px solid #000000 !important;
+  border: 1px solid {config["ELECTRICAL_SOFT_HEX"]} !important;
   box-shadow: none !important;
 }}
 .st-key-additional-export-link button p,
@@ -163,12 +180,10 @@ div[data-testid="stCaptionContainer"] p {{
   width: auto !important;
   object-fit: contain;
 }}
-.st-key-additional-iso-panel div[data-testid="stImage"],
 .st-key-additional-boxplot-panel div[data-testid="stImage"] {{
   display: flex;
   justify-content: center;
 }}
-.st-key-additional-iso-panel div[data-testid="stImage"] img,
 .st-key-additional-boxplot-panel div[data-testid="stImage"] img {{
   display: block;
   margin: 0 auto;
