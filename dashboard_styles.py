@@ -202,27 +202,6 @@ div[data-testid="stCaptionContainer"] p {{
   height: auto;
   object-fit: contain;
 }}
-.additional-machine-logo-pair {{
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(8rem, auto);
-  align-items: center;
-  gap: 2rem;
-  width: 100%;
-}}
-.additional-machine-logo-pair img {{
-  display: block;
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-}}
-.additional-machine-logo-left {{
-  justify-self: start;
-  max-height: 18rem;
-}}
-.additional-machine-logo-right {{
-  justify-self: end;
-  max-height: 10rem;
-}}
 div[data-testid="stTabs"] button[data-baseweb="tab"] {{
   gap: 0.45rem;
 }}

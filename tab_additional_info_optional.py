@@ -5,12 +5,9 @@ from pathlib import Path
 
 import streamlit as st
 
+from config import CONFIG
 from dashboard_tabs import TabDefinition
 from utils import find_image_path
-
-
-def _find_dmp70_logo_path() -> str | None:
-    return find_image_path("logo_dmp70")
 
 
 def _find_iso_logo_path() -> str | None:
@@ -29,14 +26,12 @@ def _image_to_data_uri(image_path: str) -> str:
     return f"data:{mime_type};base64,{encoded}"
 
 
-def _render_machine_logo_pair(left_image_path: str, right_image_path: str) -> None:
-    left_data_uri = _image_to_data_uri(left_image_path)
-    right_data_uri = _image_to_data_uri(right_image_path)
+def _render_centered_logo_image(image_path: str, width_px: int) -> None:
+    data_uri = _image_to_data_uri(image_path)
     st.markdown(
         f"""
-<div class="additional-machine-logo-pair">
-  <img src="{left_data_uri}" alt="" class="additional-machine-logo-left" />
-  <img src="{right_data_uri}" alt="" class="additional-machine-logo-right" />
+<div class="additional-machine-image">
+  <img src="{data_uri}" alt="" style="width:{width_px}px;" />
 </div>
 """,
         unsafe_allow_html=True,
@@ -52,11 +47,10 @@ def render_additional_info_tab() -> None:
         with st.container(border=True, key="additional-export-link"):
             st.button("Export", width="stretch", type="primary", disabled=True)
 
-    logo_dmp70 = _find_dmp70_logo_path()
     logo_iso = _find_iso_logo_path()
-    if logo_dmp70 and logo_iso:
+    if logo_iso:
         with st.container(border=True, key="additional-boxplot-panel"):
-            _render_machine_logo_pair(logo_dmp70, logo_iso)
+            _render_centered_logo_image(logo_iso, width_px=520)
 
     info_col1, info_col2 = st.columns(2)
     with info_col1:
