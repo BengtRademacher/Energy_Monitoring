@@ -122,7 +122,7 @@ _font_weight_regular = _get_env_int("FONT_WEIGHT_REGULAR", 400)
 _font_weight_semibold = _get_env_int("FONT_WEIGHT_SEMIBOLD", 600)
 _font_weight_bold = _get_env_int("FONT_WEIGHT_BOLD", 700)
 
-_logo_ifw = _get_env_str("LOGO_IFW_BASENAME", "logo_firma")
+_logo_ifw = _get_env_str("LOGO_IFW_BASENAME", "logo_fx")
 _logo_fx = _get_env_str("LOGO_FX_BASENAME", "logo_f\u00f6rderung")
 
 _tab_titles = {

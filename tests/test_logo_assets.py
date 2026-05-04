@@ -9,7 +9,7 @@ from utils import find_image_path
 
 class LogoAssetTests(unittest.TestCase):
     def test_config_defaults_use_replacement_logos(self) -> None:
-        self.assertEqual(CONFIG["LOGO_IFW_BASENAME"], "logo_firma")
+        self.assertEqual(CONFIG["LOGO_IFW_BASENAME"], "logo_fx")
         self.assertEqual(CONFIG["LOGO_FX_BASENAME"], "logo_f\u00f6rderung")
 
     def test_configured_logos_exist(self) -> None:
