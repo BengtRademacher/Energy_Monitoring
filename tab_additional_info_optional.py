@@ -26,12 +26,12 @@ def _image_to_data_uri(image_path: str) -> str:
     return f"data:{mime_type};base64,{encoded}"
 
 
-def _render_centered_logo_image(image_path: str, width_px: int) -> None:
+def _render_centered_logo_image(image_path: str, width: str) -> None:
     data_uri = _image_to_data_uri(image_path)
     st.markdown(
         f"""
 <div class="additional-machine-image">
-  <img src="{data_uri}" alt="" style="width:{width_px}px;" />
+  <img src="{data_uri}" alt="" style="width:{width};" />
 </div>
 """,
         unsafe_allow_html=True,
@@ -50,7 +50,7 @@ def render_additional_info_tab() -> None:
     logo_iso = _find_iso_logo_path()
     if logo_iso:
         with st.container(border=True, key="additional-boxplot-panel"):
-            _render_centered_logo_image(logo_iso, width_px=520)
+            _render_centered_logo_image(logo_iso, width="75%")
 
     info_col1, info_col2 = st.columns(2)
     with info_col1:
@@ -58,8 +58,8 @@ def render_additional_info_tab() -> None:
             logo_ifw = find_image_path("logo_fx")
             if logo_ifw:
                 st.image(logo_ifw, width=180)
-            st.markdown("**Uhlmann Pac-Systeme GmbH & Co. KG**")
-            st.caption("In Kooperation mit der Leibniz Universität Hannover")
+            st.markdown("**Demonstrator des IFW Hannover**")
+            st.caption("Leibniz Universität Hannover")
     with info_col2:
         with st.container(border=True, key="additional-fx-panel"):
             logo_fx = find_image_path(CONFIG["LOGO_FX_BASENAME"])
