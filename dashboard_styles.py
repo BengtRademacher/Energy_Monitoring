@@ -84,7 +84,7 @@ div[data-testid="stCaptionContainer"] p {{
 .st-key-json-body-panel {{
   background-color: {config["CHART_PANEL_BG"]} !important;
 }}
-.st-key-additional-uhlmann-link,
+.st-key-additional-ifw-link,
 .st-key-additional-export-link,
 .st-key-additional-ifw-panel,
 .st-key-additional-fx-panel,
@@ -113,21 +113,21 @@ div[data-testid="stCaptionContainer"] p {{
   display: flex;
   width: 100%;
 }}
-.st-key-additional-uhlmann-link a {{
+.st-key-additional-ifw-link a {{
   background: {config["ELECTRICAL_PRIMARY_HEX"]} !important;
   color: #ffffff !important;
   border: 1px solid {config["ELECTRICAL_PRIMARY_HEX"]} !important;
 }}
-.st-key-additional-uhlmann-link a:hover,
-.st-key-additional-uhlmann-link a:focus,
-.st-key-additional-uhlmann-link a:active {{
+.st-key-additional-ifw-link a:hover,
+.st-key-additional-ifw-link a:focus,
+.st-key-additional-ifw-link a:active {{
   background: {config["ELECTRICAL_PRIMARY_HEX"]} !important;
   color: #ffffff !important;
   border: 1px solid {config["ELECTRICAL_PRIMARY_HEX"]} !important;
   box-shadow: none !important;
 }}
-.st-key-additional-uhlmann-link a p,
-.st-key-additional-uhlmann-link a span {{
+.st-key-additional-ifw-link a p,
+.st-key-additional-ifw-link a span {{
   color: #ffffff !important;
   font-size: inherit !important;
   font-weight: var(--fx-font-weight-semibold) !important;
@@ -201,6 +201,27 @@ div[data-testid="stCaptionContainer"] p {{
   max-width: 100%;
   height: auto;
   object-fit: contain;
+}}
+.additional-machine-logo-pair {{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, auto);
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}}
+.additional-machine-logo-pair img {{
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}}
+.additional-machine-logo-left {{
+  justify-self: start;
+  max-height: 18rem;
+}}
+.additional-machine-logo-right {{
+  justify-self: end;
+  max-height: 10rem;
 }}
 div[data-testid="stTabs"] button[data-baseweb="tab"] {{
   gap: 0.45rem;

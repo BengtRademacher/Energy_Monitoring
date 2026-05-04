@@ -5,16 +5,19 @@ from pathlib import Path
 
 import streamlit as st
 
-from config import CONFIG
 from dashboard_tabs import TabDefinition
 from utils import find_image_path
 
 
-def _find_boxplot_logo_path() -> str | None:
-    return find_image_path("logo_b1770c")
+def _find_dmp70_logo_path() -> str | None:
+    return find_image_path("logo_dmp70")
 
 
-def _render_centered_logo_image(image_path: str, width_px: int) -> None:
+def _find_iso_logo_path() -> str | None:
+    return find_image_path("logo_ISO")
+
+
+def _image_to_data_uri(image_path: str) -> str:
     suffix = Path(image_path).suffix.lower()
     mime_type = {
         ".png": "image/png",
@@ -23,10 +26,17 @@ def _render_centered_logo_image(image_path: str, width_px: int) -> None:
         ".svg": "image/svg+xml",
     }.get(suffix, "application/octet-stream")
     encoded = base64.b64encode(Path(image_path).read_bytes()).decode("ascii")
+    return f"data:{mime_type};base64,{encoded}"
+
+
+def _render_machine_logo_pair(left_image_path: str, right_image_path: str) -> None:
+    left_data_uri = _image_to_data_uri(left_image_path)
+    right_data_uri = _image_to_data_uri(right_image_path)
     st.markdown(
         f"""
-<div class="additional-machine-image">
-  <img src="data:{mime_type};base64,{encoded}" alt="" style="width:{width_px}px;" />
+<div class="additional-machine-logo-pair">
+  <img src="{left_data_uri}" alt="" class="additional-machine-logo-left" />
+  <img src="{right_data_uri}" alt="" class="additional-machine-logo-right" />
 </div>
 """,
         unsafe_allow_html=True,
@@ -42,15 +52,16 @@ def render_additional_info_tab() -> None:
         with st.container(border=True, key="additional-export-link"):
             st.button("Export", width="stretch", type="primary", disabled=True)
 
-    logo_boxplot = _find_boxplot_logo_path()
-    if logo_boxplot:
+    logo_dmp70 = _find_dmp70_logo_path()
+    logo_iso = _find_iso_logo_path()
+    if logo_dmp70 and logo_iso:
         with st.container(border=True, key="additional-boxplot-panel"):
-            _render_centered_logo_image(logo_boxplot, width_px=760)
+            _render_machine_logo_pair(logo_dmp70, logo_iso)
 
     info_col1, info_col2 = st.columns(2)
     with info_col1:
         with st.container(border=True, key="additional-ifw-panel"):
-            logo_ifw = find_image_path(CONFIG["LOGO_IFW_BASENAME"])
+            logo_ifw = find_image_path("logo_fx")
             if logo_ifw:
                 st.image(logo_ifw, width=180)
             st.markdown("**Uhlmann Pac-Systeme GmbH & Co. KG**")
