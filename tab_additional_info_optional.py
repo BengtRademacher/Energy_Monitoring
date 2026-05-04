@@ -36,8 +36,8 @@ def _render_centered_logo_image(image_path: str, width_px: int) -> None:
 def render_additional_info_tab() -> None:
     link_col1, link_col2 = st.columns(2)
     with link_col1:
-        with st.container(border=True, key="additional-uhlmann-link"):
-            st.link_button("Link zu Uhlmann", "https://www.uhlmann.de/de", width="stretch", type="primary")
+        with st.container(border=True, key="additional-ifw-link"):
+            st.link_button("Link zum IFW Hannover", "https://www.ifw.uni-hannover.de", width="stretch", type="primary")
     with link_col2:
         with st.container(border=True, key="additional-export-link"):
             st.button("Export", width="stretch", type="primary", disabled=True)
