@@ -50,6 +50,7 @@ def render_additional_info_tab() -> None:
     logo_iso = _find_iso_logo_path()
     if logo_iso:
         with st.container(border=True, key="additional-boxplot-panel"):
+            st.markdown("**Result of energy monitoring and measurements according to ISO 14955-3**")
             _render_centered_logo_image(logo_iso, width="50%")
 
     info_col1, info_col2 = st.columns(2)
