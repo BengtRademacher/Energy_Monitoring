@@ -12,6 +12,7 @@ Dieses Projekt stellt eine kompakte Monitoring-Oberfläche für maschinenbezogen
 | Schneller lokaler Start | Läuft als normale Streamlit-App und eignet sich gut für Demos und lokale Entwicklung. |
 | Modulare UI | Zusätzliche Tabs sind bewusst getrennt aufgebaut, damit die Oberfläche ohne tiefgreifende Codeänderungen vereinfacht werden kann. |
 | Fokus auf Visualisierung | Schwerpunkt auf gut lesbaren Statusanzeigen, Zeitreihenansichten und strukturierter Inspektion von Maschinendaten. |
+| Zusatzinformationen | Zeigt Projektkontext, Demonstrator-Informationen und Ergebnisse des Energy Monitorings nach ISO 14955-3. |
 
 ## Schnellstart
 
@@ -26,6 +27,7 @@ Nach dem Start öffnet sich das Dashboard im Browser und verbindet sich automati
 
 - Ein zentrales Dashboard für Live-Monitoring von Energieverbrauch und Maschinenstatus
 - Optionale Ansichten für Komponenten und Zusatzinformationen
+- Einen Zusatzinformationen-Tab mit IFW-Demonstrator-Kontext und ISO-14955-3-Ergebnisdarstellung
 - Einen ausgelagerten Legacy-Tab für JSON-Inspektion, der im Code erhalten bleibt
 - Einen internen Demo-Datenmodus für Entwicklung und Demonstrationen
 - Gemeinsame Plot-, Validierungs- und Transformationshelfer für eine konsistente Oberfläche
@@ -51,7 +53,7 @@ Das Dashboard besteht aus einer zentralen Monitoring-Ansicht und optionalen Erwe
 | --- | --- |
 | `Dashboard` | Zentrale Betriebsübersicht mit den wichtigsten Live-Werten und Statusinformationen |
 | `Components` | Detaillierte Ansicht auf Komponentenebene |
-| `Additional Info` | Ergänzende Maschineninformationen und zusätzliche Kontextdaten |
+| `Additional Info` | Projektkontext, Demonstrator-Informationen und ISO-14955-3-Ergebnisdarstellung |
 | `JSON Explorer (Legacy)` | Einblick in die rohen strukturierten Snapshots für Debugging und Validierung |
 
 ## Anpassung
